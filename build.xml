@@ -1,0 +1,176 @@
+<project name="YMConnectionServer" basedir="./" default="all">
+    <!-- Project settings -->
+    <property name="project.title" value="YMConnectionServer"/>	
+
+	  <path id="class.path">
+
+		<fileset dir="lib">
+
+		  <include name="**/*.jar"/>
+
+		</fileset>
+
+	  </path>
+
+		<!-- Classpath for Project -->
+
+		<path id="compile.classpath">
+
+			<pathelement path ="lib/commons-beanutils.jar"/>
+
+			<pathelement path ="lib/commons-digester.jar"/>
+
+			<pathelement path ="lib/struts.jar"/>
+
+			<pathelement path ="classes"/>
+
+			<pathelement path ="${classpath}"/>
+
+		</path>
+
+		<!-- Check timestamp on files -->
+		<!-- Copy any resource or configuration files -->
+
+		<target name="prepare">
+			<tstamp/>
+			
+			<copy todir="classes" includeEmptyDirs="no">
+
+				<fileset dir="resources">
+
+				<patternset>
+
+					<include name="**/*.conf"/>
+
+					<include name="**/*.properties"/>
+
+					<include name="**/*.xml"/>
+				</patternset>
+
+				</fileset>
+
+				<fileset dir="src/java">
+
+				<patternset>
+
+					<include name="**/*.xml"/>
+
+				</patternset>
+
+				</fileset>
+				
+			</copy>
+
+		</target>
+
+		<!-- Normal build of application -->
+
+		<target name="compile" depends="prepare">
+
+			<javac srcdir="src/java" destdir="classes" 
+                         debug="true" debuglevel="lines,vars,source">
+
+				<classpath refid="class.path"/>
+
+			</javac>
+
+		</target>
+		<!-- Remove classes directory for clean build -->
+
+		<target name="clean"
+
+		  description="Prepare for clean build">
+
+		  <delete dir="classes"/>
+			<delete dir="war"/>
+
+		  <mkdir  dir="classes"/>
+
+		</target>
+
+
+		<!-- Build entire project -->
+
+		<target name="project" depends="prepare,compile"/>
+
+		<!-- Create binary distribution -->
+
+		<target name="dist"
+
+			description="Create binary distribution" depends="project">
+
+			<mkdir dir="war/WEB-INF/classes"/>
+			<mkdir dir="war/WEB-INF/lib"/>
+			
+			<copy todir="war/WEB-INF">
+				<fileset dir="classes">
+					<patternset>
+						<include name="**/web.xml"/>
+					</patternset>
+				</fileset>				
+			</copy>
+				
+				<copy todir="war">
+					<fileset dir="src/jsp">
+						<patternset>
+							<include name="**/*"/>
+						</patternset>
+					</fileset>
+					<fileset dir="src/js">
+						<patternset>
+							<include name="**/*"/>
+						</patternset>
+					</fileset>
+
+					<fileset dir="resources">
+						<patternset>
+							<include name="**/*.jpg"/>
+						</patternset>
+					</fileset>
+
+				</copy>
+				
+				<copy todir="war/WEB-INF/classes" includeEmptyDirs="no">
+
+					<fileset dir="classes">
+
+					<patternset>
+
+						<include name="**/*"/>
+						</patternset>
+						</fileset>
+		</copy>
+			
+					<copy todir="war/WEB-INF/lib" includeEmptyDirs="no">
+
+						<fileset dir="lib">
+
+						<patternset>
+
+							<include name="**/*.jar"/>
+							
+							</patternset>
+							</fileset>
+			</copy>
+			
+
+		  <war
+
+			basedir="./war"
+
+			warfile="${project.title}.war"
+
+			webxml="./war/WEB-INF/web.xml">
+
+			
+
+		   </war>
+
+    </target>
+
+
+    <!-- Build project and create distribution-->
+
+	<target name="all" depends="dist"/>
+
+        </project>

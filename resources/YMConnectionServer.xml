@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="YMConnectionServer" namespace="/" extends="struts-default">
+
+
+        <action name="Login" class="ymconnectionserver.actions.LoginAction">
+	        <result name="success" type="stream">			
+		  		<param name="inputName">responseDataStream</param>
+			</result>
+        </action>
+
+        <action name="RefreshToken" class="ymconnectionserver.actions.RefreshTokenAction">
+	        <result name="success" type="stream">			
+		  		<param name="inputName">responseDataStream</param>
+			</result>
+        </action>
+
+    </package>
+    
+</struts>
